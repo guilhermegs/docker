@@ -12,10 +12,8 @@ services:
     ports:
       - "3000:3000"
     tty: true
-
   db:
     image: mysql:latest
-    # command: --innodb-use-native-aio=0
     container_name: db
     restart: always
     tty: true
@@ -27,8 +25,18 @@ services:
       MYSQL_DATABASE: nodedb
     networks:
       - nodenet
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: guilhermegs/nginx
+    container_name: nginx
+    tty: true
+    ports:
+      - "80:80"
+    networks:
+      - nodenet
     
-
 networks:
   nodenet:
     driver: bridge

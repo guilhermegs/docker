@@ -1,6 +1,6 @@
 # docker
 
-O objetivo desse repositório ée armazenar o resultado de alguns estudos que estou fazendo com docker.
+O objetivo desse repositório é armazenar o resultado de alguns estudos que estou fazendo com docker.
 
 # docker-compose.yml
 

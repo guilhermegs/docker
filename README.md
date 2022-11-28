@@ -11,5 +11,5 @@ Para criar os containers e acessar o conteúdo da aplicação, basta rodar o com
 
 ````
 docker-compose up -d
-curl http://localhost
+curl http://localhost:8080
 ````

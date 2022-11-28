@@ -33,7 +33,7 @@ services:
     container_name: nginx
     tty: true
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - nodenet
     

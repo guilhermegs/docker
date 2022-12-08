@@ -1,34 +1,40 @@
 version: '3'
 
 services:
+  db:
+    image: mysql:latest
+    container_name: db
+    command: --init-file /data/application/init.sql
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init.sql:/data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nodedb
+    networks:
+      - nodenet
+
   app:
     build:
       context: ./node
-      dockerfile: Dockerfile
     image: guilhermegs/node
     container_name: app
+    entrypoint: wait-for db:3306 -t 40 -- ./start.sh
+    volumes:
+      - ./node:/home/node/app
     networks:
       - nodenet
     ports:
       - "3000:3000"
     tty: true
-  db:
-    image: mysql:latest
-    container_name: db
-    restart: always
-    tty: true
-    volumes:
-      - ./mysql:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
-      MYSQL_DATABASE: nodedb
-    networks:
-      - nodenet
+    depends_on:
+     - db
+
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
     image: guilhermegs/nginx
     container_name: nginx
     tty: true
@@ -36,6 +42,8 @@ services:
       - "8080:80"
     networks:
       - nodenet
+    depends_on:
+      - app
     
 networks:
   nodenet:
